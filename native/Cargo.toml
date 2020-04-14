@@ -1,0 +1,18 @@
+[package]
+name = "tcn-node"
+version = "0.0.0"
+authors = ["David Rolle <miridius@miridi.us>"]
+license = "Apache-2.0"
+build = "build.rs"
+edition = "2018"
+exclude = ["artifacts.json", "index.node"]
+
+[lib]
+name = "tcn_node"
+crate-type = ["cdylib"]
+
+[build-dependencies]
+neon-build = "0.4.0"
+
+[dependencies]
+neon = "0.4.0"
