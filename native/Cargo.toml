@@ -16,3 +16,5 @@ neon-build = "0.4.0"
 
 [dependencies]
 neon = "0.4.0"
+tcn = "0.4.1"
+rand = "0.7"
