@@ -48,10 +48,11 @@ console.log(tcn.tcn_example()); // should print "symptom data"
 ### Releasing
 
 On master branch:
-1. Update version in `native/Cargo.toml` if appropriate
 1. Update node version, e.g.:
-    - `npm version preminor --preid=alpha`  
-    - `npm version minor`
-1. `git push`
+    - `npm version --git-tag-version=false preminor --preid=alpha`
+    - `npm version --git-tag-version=false minor)`
+1. `VERSION=$(node -p -e "require('./package.json').version")`
+1. Update version in `native/Cargo.toml`
+1. `git commit -am "$VERSION" && git tag v$VERSION && git push --follow-tags`
 1. `npm run release`
 1. `npm publish`
