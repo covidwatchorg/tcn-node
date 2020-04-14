@@ -2,6 +2,16 @@
 
 Node.js Module that wraps the [TCN Protocol Rust Implementation](https://github.com/TCNCoalition/TCN)
 
+## TODO
+
+- [x] Publish a proof of concept node module
+- [ ] Automatically build binaries for various platforms so that we can run on GCP
+- [ ] Add tests
+- [ ] Expose full TCN API
+- [ ] Use Typescript
+- [ ] Use Prettier & ESLint
+- [ ] Automatically compile/run on changes (nodemon + cargo-watch)
+
 ## Development
 
 ### Prerequisites
@@ -21,7 +31,7 @@ Node.js Module that wraps the [TCN Protocol Rust Implementation](https://github.
 
 ```
 $ git clone https://github.com/covid19risk/tcn-node.git && cd tcn-node
-$ npm run install && node lib/index.js
+$ npm run dev && node lib/index.js
 ```
 
 ### Using as a dependency in another project
@@ -37,18 +47,11 @@ console.log(tcn.tcn_example()); // should print "symptom data"
 
 ### Releasing
 
+On master branch:
 1. Update version in `native/Cargo.toml` if appropriate
-2. Update node version, e.g.:
+1. Update node version, e.g.:
     - `npm version preminor --preid=alpha`  
     - `npm version minor`
-3. `npm publish`
-
-### TODO
-
-- [x] Publish a proof of concept node module
-- [ ] Automatically build binaries for various platforms so that we can run on GCP
-- [ ] Add tests
-- [ ] Expose full TCN API
-- [ ] Use Typescript
-- [ ] Use Prettier & ESLint
-- [ ] Automatically compile/run on changes (nodemon + cargo-watch)
+1. `git push`
+1. `npm run release`
+1. `npm publish`

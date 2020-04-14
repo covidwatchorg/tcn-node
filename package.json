@@ -4,8 +4,10 @@
   "description": "Node.js Module that Wraps TCN Protocol Rust Implementation",
   "main": "lib/index.js",
   "scripts": {
-    "test": "TODO",
-    "install": "npx neon build --release"
+    "dev": "neon build",
+    "test": "echo TODO",
+    "install": "npx node-pre-gyp install --fallback-to-build=false || npx neon build --release",
+    "release": "node-pre-gyp package && node-pre-gyp-github publish --release"
   },
   "repository": {
     "type": "git",
@@ -23,7 +25,22 @@
     "url": "https://github.com/covid19risk/tcn-node/issues"
   },
   "homepage": "https://github.com/covid19risk/tcn-node#readme",
-  "dependencies": {
-    "neon-cli": "^0.4.0"
+  "dependencies": {},
+  "devDependencies": {
+    "neon-cli": "^0.4.0",
+    "node-pre-gyp": "^0.14.0",
+    "node-pre-gyp-github": "^1.4.3"
+  },
+  "files": [
+    "native/index.node",
+    "lib"
+  ],
+  "binary": {
+    "module_name": "index",
+    "host": "https://github.com/covid19risk/tcn-node/releases/download/",
+    "remote_path": "v{version}",
+    "package_name": "{node_abi}-{platform}-{arch}.tar.gz",
+    "module_path": "./native",
+    "pkg_path": "."
   }
 }
