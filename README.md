@@ -11,6 +11,20 @@ Node.js Module that wraps the [TCN Protocol Rust Implementation](https://github.
 - [ ] Use Typescript
 - [ ] Use Prettier & ESLint
 - [ ] Automatically compile/run on changes (nodemon + cargo-watch)
+- [ ] Put release process into a shell script
+
+## Installation
+
+```
+$ npm install covid19risk/tcn-node
+```
+
+## Usage
+
+```js
+import tcn from "tcn-node";
+console.log(tcn.tcn_example()); // should print "symptom data"
+```
 
 ## Development
 
@@ -32,17 +46,6 @@ Node.js Module that wraps the [TCN Protocol Rust Implementation](https://github.
 ```
 $ git clone https://github.com/covid19risk/tcn-node.git && cd tcn-node
 $ npm run dev && node lib/index.js
-```
-
-### Using as a dependency in another project
-
-```
-$ npm install tcn-node
-```
-
-```js
-import tcn from "tcn-node";
-console.log(tcn.tcn_example()); // should print "symptom data"
 ```
 
 ### Releasing
