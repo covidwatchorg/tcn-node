@@ -2,6 +2,30 @@
 
 Node.js Module that wraps the [TCN Protocol Rust Implementation](https://github.com/TCNCoalition/TCN)
 
+## TODO
+
+- [x] Publish a proof of concept node module
+- [x] Automatically build binaries for various platforms so that we can run on GCP
+- [ ] Add tests
+- [ ] Expose full TCN API
+- [ ] Use Typescript
+- [ ] Use Prettier & ESLint
+- [ ] Automatically compile/run on changes (nodemon + cargo-watch)
+- [ ] Put release process into a shell script
+
+## Installation
+
+```
+$ npm install covid19risk/tcn-node
+```
+
+## Usage
+
+```js
+import tcn from "tcn-node";
+console.log(tcn.tcn_example()); // should print "symptom data"
+```
+
 ## Development
 
 ### Prerequisites
@@ -21,34 +45,20 @@ Node.js Module that wraps the [TCN Protocol Rust Implementation](https://github.
 
 ```
 $ git clone https://github.com/covid19risk/tcn-node.git && cd tcn-node
-$ npm run install && node lib/index.js
-```
-
-### Using as a dependency in another project
-
-```
-$ npm install tcn-node
-```
-
-```js
-import tcn from "tcn-node";
-console.log(tcn.tcn_example()); // should print "symptom data"
+$ npm run dev && node lib/index.js
 ```
 
 ### Releasing
 
-1. Update version in `native/Cargo.toml` if appropriate
-2. Update node version, e.g.:
-    - `npm version preminor --preid=alpha`  
-    - `npm version minor`
-3. `npm publish`
+Suggestion: only make full releases from master, otherwise make a pre-release
 
-### TODO
-
-- [x] Publish a proof of concept node module
-- [ ] Automatically build binaries for various platforms so that we can run on GCP
-- [ ] Add tests
-- [ ] Expose full TCN API
-- [ ] Use Typescript
-- [ ] Use Prettier & ESLint
-- [ ] Automatically compile/run on changes (nodemon + cargo-watch)
+1. Make sure your working copy is clean
+1. `OLD_VERSION=$(node -p -e "require('./package.json').version")`
+1. Update node version, e.g.:
+    - `npm version --git-tag-version=false preminor --preid=alpha`
+    - `npm version --git-tag-version=false minor)`
+1. `VERSION=$(node -p -e "require('./package.json').version")`
+1. `sed -i "s/$OLD_VERSION/$VERSION/" native/Cargo.toml`
+1. `git commit -am "$VERSION" && git tag "v$VERSION"`
+1. `git push && git push --tags`
+1. CI will create a GitHub release, upload binaries, and publish to npm

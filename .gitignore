@@ -114,7 +114,10 @@ dist
 .yarn/build-state.yml
 .pnp.*
 
-# Neon build output
+# Output of `neon build`
 native/target
 native/index.node
 native/artifacts.json
+
+# Output of `node-pre-gyp package`
+build/
