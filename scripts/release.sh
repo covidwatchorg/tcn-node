@@ -4,7 +4,14 @@
 OLD_VERSION=$(node -p -e "require('./package.json').version")
 npm version --git-tag-version=false $@ || exit
 VERSION=$(node -p -e "require('./package.json').version")
-sed -i "s/$OLD_VERSION/$VERSION/" native/Cargo.toml || exit
+
+cd native || exit
+sed -i "s/$OLD_VERSION/$VERSION/" Cargo.toml || exit
+cargo update || exit
+cd ..
+
+npm test || exit
+
 git commit -am "$VERSION" && git tag "v$VERSION" || exit
 git push && git push --tags
 
