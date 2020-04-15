@@ -11,7 +11,7 @@ Node.js Module that wraps the [TCN Protocol Rust Implementation](https://github.
 - [ ] Use Typescript
 - [ ] Use Prettier & ESLint
 - [ ] Automatically compile/run on changes (nodemon + cargo-watch)
-- [ ] Put release process into a shell script
+- [x] Put release process into a shell script
 
 ## Installation
 
@@ -52,13 +52,8 @@ $ npm run dev && node lib/index.js
 
 Suggestion: only make full releases from master, otherwise make a pre-release
 
-1. Make sure your working copy is clean
-1. `OLD_VERSION=$(node -p -e "require('./package.json').version")`
-1. Update node version, e.g.:
-    - `npm version --git-tag-version=false preminor --preid=alpha`
-    - `npm version --git-tag-version=false minor)`
-1. `VERSION=$(node -p -e "require('./package.json').version")`
-1. `sed -i "s/$OLD_VERSION/$VERSION/" native/Cargo.toml`
-1. `git commit -am "$VERSION" && git tag "v$VERSION"`
-1. `git push && git push --tags`
-1. CI will create a GitHub release, upload binaries, and publish to npm
+Full release: `./scripts/release.sh major | minor | patch`  
+Pre-release: `./scripts/release.sh premajor | preminor | prepatch --preid=alpha|beta|rc`  
+
+Use minor/preminor for functional changes, patch/prepatch for bug fixes.  
+Major/premajor for large breaking changes / overhauls, and 1.0.0 release.
