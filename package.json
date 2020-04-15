@@ -3,6 +3,7 @@
   "version": "0.2.0",
   "description": "Node.js Module that Wraps TCN Protocol Rust Implementation",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "dev": "neon build",
     "test": "echo TODO",
