@@ -98,7 +98,8 @@ $ npm run dev && node lib/index.js
 Suggestion: only make full releases from master, otherwise make a pre-release
 
 Full release: `./scripts/release.sh major | minor | patch`  
-Pre-release: `./scripts/release.sh premajor | preminor | prepatch --preid=alpha|beta|rc`  
+Pre-release: `./scripts/release.sh premajor | preminor | prepatch | prerelease --preid=alpha|beta|rc`  
 
 Use minor/preminor for functional changes, patch/prepatch for bug fixes.  
+Use prerelease when already on a alpha/beta/rc version to just bump the last part.
 Major/premajor for large breaking changes / overhauls, and 1.0.0 release.
