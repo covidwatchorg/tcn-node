@@ -15,8 +15,8 @@ crate-type = ["cdylib"]
 neon-build = "0.4.0"
 
 [dependencies]
-neon = "0.3"
-neon-serde = "0.3"
+neon = "^0.4"
+neon-serde = { git = "https://github.com/miridius/neon-serde", branch = "use-neon-0.4" }
 rand = "0.7"
 serde = { version = "1.0", features = ["derive"] }
 tcn = { git = "https://github.com/miridius/TCN", branch = "serde" }

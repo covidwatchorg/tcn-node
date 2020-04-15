@@ -167,9 +167,9 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "libc"
-version = "0.2.68"
+version = "0.2.69"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dea0c0405123bba743ee3f91f49b1c7cfb684eef0da0a50110f758ccf24cdff0"
+checksum = "99e85c08494b21a9054e7fe1374a732aeadaff3980b6990b94bfd3a70f690005"
 
 [[package]]
 name = "memchr"
@@ -179,24 +179,14 @@ checksum = "3728d817d99e5ac407411fa471ff9800a778d88a24685968b36824eaf4bee400"
 
 [[package]]
 name = "neon"
-version = "0.3.3"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "53b85accbbd250627f899a6fc1f220bbb4c8c2ff6dc71830dc6b752b39c2eb97"
+checksum = "6cac4691701b686e6c07b2eb5b51a9f26f5c11179c5d7924b78100dd387fc99d"
 dependencies = [
  "cslice",
- "neon-build 0.3.3",
+ "neon-build",
  "neon-runtime",
  "semver",
-]
-
-[[package]]
-name = "neon-build"
-version = "0.3.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ae406bf1065c4399e69d328a3bd8d4f088f2a205dc3881bf68c0ac775bfef337"
-dependencies = [
- "cfg-if",
- "neon-sys",
 ]
 
 [[package]]
@@ -206,13 +196,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f9ed332afd4711b84f4f83d334428a1fd9ce53620b62b87595934297c5ede2ed"
 dependencies = [
  "cfg-if",
+ "neon-sys",
 ]
 
 [[package]]
 name = "neon-runtime"
-version = "0.3.3"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d8465ac4ed3f340dead85e053b75a5f639f48ac6343b3523eff90a751758eead"
+checksum = "2beea093a60c08463f65e1da4cda68149986f60d8d2177489b44589463c782a6"
 dependencies = [
  "cfg-if",
  "neon-sys",
@@ -221,8 +212,7 @@ dependencies = [
 [[package]]
 name = "neon-serde"
 version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4b45847cc4cec46db1ff2e921cd9948b38afa0c2348c99c06f9ae70406a30b60"
+source = "git+https://github.com/miridius/neon-serde?branch=use-neon-0.4#1c185042fc19213814dd57cc0b66d9b3e99c40b3"
 dependencies = [
  "error-chain",
  "neon",
@@ -233,9 +223,9 @@ dependencies = [
 
 [[package]]
 name = "neon-sys"
-version = "0.3.3"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8ae4cf3871ca5a395077e68144c1754e94e9e1e3329e7f8399d999ca573ed89a"
+checksum = "69a6c1ba6b926746f4d3f596de18ce49d062d78fd9f35f636080232aa77a0e16"
 dependencies = [
  "cc",
  "regex",
@@ -482,7 +472,7 @@ name = "tcn-node"
 version = "0.3.0-alpha.0"
 dependencies = [
  "neon",
- "neon-build 0.4.0",
+ "neon-build",
  "neon-serde",
  "rand",
  "serde",
@@ -520,9 +510,9 @@ dependencies = [
 
 [[package]]
 name = "typenum"
-version = "1.11.2"
+version = "1.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6d2783fe2d6b8c1101136184eb41be8b1ad379e4657050b8aaff0c79ee7575f9"
+checksum = "373c8a200f9e67a0c95e62a4f52fbf80c23b4381c05a17845531982fa99e6b33"
 
 [[package]]
 name = "unicode-xid"
