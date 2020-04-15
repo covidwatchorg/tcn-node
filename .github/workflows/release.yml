@@ -2,15 +2,17 @@
 
 name: Release Node Module
 
-# TODO: change this to tags once CI implementation is stable
-on: [push]
+# Run whenever we create a new version tag
+on:
+  push:
+    tags:
+      - v*
 
 jobs:
   build:
     runs-on: ${{ matrix.os }}
 
     strategy:
-      fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         node: [8.x, 10.x, 12.x, 13.x]
@@ -29,3 +31,17 @@ jobs:
     - run: npm run release
       env:
         NODE_PRE_GYP_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 12
+        registry-url: https://registry.npmjs.org/
+    - run: npm ci
+    - run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
