@@ -93,6 +93,12 @@ $ git clone https://github.com/covid19risk/tcn-node.git && cd tcn-node
 $ npm run dev && node lib/index.js
 ```
 
+### Testing
+
+```
+$ npm run dev && npm test
+```
+
 ### Releasing
 
 Suggestion: only make full releases from master, otherwise make a pre-release

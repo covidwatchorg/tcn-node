@@ -6,7 +6,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "dev": "neon build",
-    "test": "echo TODO",
+    "test": "jest",
     "install": "npx node-pre-gyp install --fallback-to-build=false || npx neon build --release",
     "release": "node-pre-gyp package && node-pre-gyp-github publish --release"
   },
@@ -28,6 +28,7 @@
   "homepage": "https://github.com/covid19risk/tcn-node#readme",
   "dependencies": {},
   "devDependencies": {
+    "jest": "^25.4.0",
     "neon-cli": "^0.4.0",
     "node-pre-gyp": "^0.14.0",
     "node-pre-gyp-github": "^1.4.3"
