@@ -1,6 +1,6 @@
 [package]
 name = "tcn-node"
-version = "0.3.0-alpha.1"
+version = "0.3.0-alpha.2"
 authors = ["David Rolle <miridius@miridi.us>"]
 license = "Apache-2.0"
 build = "build.rs"
