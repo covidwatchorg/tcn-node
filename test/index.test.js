@@ -1,13 +1,13 @@
-const tcn = require('..');
+const tcn = require('../native');
 
-describe("tcn_example", () => {
+describe("tcnExample", () => {
   it("should return 'symptom data'", () => {
-    expect(tcn.tcn_example()).toBe("symptom data");
+    expect(tcn.tcnExample()).toBe("symptom data");
   })
 })
 
-describe("signed_report_example", () => {
-  let signedReport = tcn.signed_report_example();
+describe("signedReportExample", () => {
+  let signedReport = tcn.signedReportExample();
   it("should include a report with the expected values", () => {
     expect(signedReport.report.j_1).toBe(20);
     expect(signedReport.report.j_2).toBe(90);
@@ -17,7 +17,7 @@ describe("signed_report_example", () => {
     // TODO: JSON serialization returns rvk as an array - rvk: [ ... ],
     // but deserialization expects an array in an array - rvk: [[ ... ]]
     signedReport.report.rvk = [signedReport.report.rvk];
-    expect(tcn.validate_report(signedReport)).toBe(true);
+    expect(tcn.validateReport(signedReport)).toBe(true);
   });
 })
 
@@ -61,12 +61,12 @@ const exampleSignedReport = {
   }
 }
 
-describe("validate_report", () => {
+describe("validateReport", () => {
   it("should return true for the example signed report in the README", () => {
-    expect(tcn.validate_report(exampleSignedReport)).toBe(true);
+    expect(tcn.validateReport(exampleSignedReport)).toBe(true);
   })
   it("should return false if the report's memo data is modified", () => {
     exampleSignedReport.report.memo_data.push(0);
-    expect(tcn.validate_report(exampleSignedReport)).toBe(false);
+    expect(tcn.validateReport(exampleSignedReport)).toBe(false);
   })
 })

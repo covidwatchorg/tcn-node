@@ -26,11 +26,11 @@ $ npm install covid19risk/tcn-node
 ```js
 import tcn from "tcn-node";
 
-console.log(tcn.tcn_example()); // => "symptom data"
+console.log(tcn.tcnExample()); // => "symptom data"
 
-console.log(tcn.signed_report_example()) // => generates a signed report as JSON
+console.log(tcn.signedReportExample()) // => generates a signed report as JSON
 
-console.log(tcn.validate_report({
+console.log(tcn.validateReport({
   report: {
     rvk: [[
       205, 234, 147, 231, 210, 96, 99,

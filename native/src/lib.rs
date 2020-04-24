@@ -7,7 +7,7 @@ use tcn::*;
 
 export! {
 
-    fn tcn_example() -> String {
+    fn tcnExample() -> String {
         // Generate a report authorization key.  This key represents the capability
         // to publish a report about a collection of derived temporary contact numbers.
         let rak = ReportAuthorizationKey::new(rand::thread_rng());
@@ -50,7 +50,7 @@ export! {
         String::from(memo_data)
     }
 
-    fn signed_report_example() -> SignedReport {
+    fn signedReportExample() -> SignedReport {
         let rak = ReportAuthorizationKey::new(rand::thread_rng());
 
         let signed_report = rak
@@ -65,7 +65,7 @@ export! {
         signed_report
     }
 
-    fn validate_report(signed_report: SignedReport) -> bool {
+    fn validateReport(signed_report: SignedReport) -> bool {
         signed_report.verify().is_ok()
     }
 }
