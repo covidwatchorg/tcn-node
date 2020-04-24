@@ -44,5 +44,8 @@
     "package_name": "{node_abi}-{platform}-{arch}.tar.gz",
     "module_path": "./native",
     "pkg_path": "."
+  },
+  "engines": {
+    "node": ">=10"
   }
 }

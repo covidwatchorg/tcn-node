@@ -1,12 +1,14 @@
 # tcn-node
 
-Node.js Module that wraps the [TCN Protocol Rust Implementation](https://github.com/TCNCoalition/TCN)
+Node.js module that wraps the [TCN Protocol Rust Implementation](https://github.com/TCNCoalition/TCN)
+
+![npm](https://img.shields.io/npm/v/tcn-node)
 
 ## TODO
 
 - [x] Publish a proof of concept node module
 - [x] Automatically build binaries for various platforms so that we can run on GCP
-- [ ] Add tests
+- [x] Add tests
 - [ ] Expose full TCN API
 - [ ] Conversions from Strings etc. to/from byte arrays for convenience
 - [ ] Serialize TCN Errors
@@ -17,9 +19,15 @@ Node.js Module that wraps the [TCN Protocol Rust Implementation](https://github.
 
 ## Installation
 
+Pre-built binaries available for Node v10, v12, v13, and v14.
+
+As long as you are using one of those versions, installing via npm should automatically download the binary for your platform:
+
 ```
-$ npm install covid19risk/tcn-node
+$ npm install tcn-node
 ```
+
+In case you are using a different version of Node or an unusual system architecture, you may need to also install [Rust](https://www.rust-lang.org/tools/install) and the Node build tools so that it can to build the native addon during install.
 
 ## Usage
 
