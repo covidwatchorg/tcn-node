@@ -1,4 +1,4 @@
-const tcn = require('../native');
+const tcn = require('..');
 
 describe("tcnExample", () => {
   it("should return 'symptom data'", () => {
@@ -14,22 +14,19 @@ describe("signedReportExample", () => {
     expect(signedReport.report.memo_type).toBe('CoEpiV1');
   });
   it("should have a valid signature", () => {
-    // TODO: JSON serialization returns rvk as an array - rvk: [ ... ],
-    // but deserialization expects an array in an array - rvk: [[ ... ]]
-    signedReport.report.rvk = [signedReport.report.rvk];
     expect(tcn.validateReport(signedReport)).toBe(true);
   });
 })
 
 const exampleSignedReport = {
   report: {
-    rvk: [[
+    rvk: [
       205, 234, 147, 231, 210, 96, 99,
       128, 241, 255, 168, 61, 243, 222,
       144, 41, 194, 92, 112, 118, 140,
       98, 90, 38, 156, 32, 216, 117,
       171, 14, 206, 117
-    ]],
+    ],
     tck_bytes: [
       5, 44, 47, 43, 14, 249, 162, 165,
       139, 157, 225, 217, 38, 77, 151, 140,

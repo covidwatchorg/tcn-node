@@ -40,13 +40,13 @@ console.log(tcn.signedReportExample()) // => generates a signed report as JSON
 
 console.log(tcn.validateReport({
   report: {
-    rvk: [[
+    rvk: [
       205, 234, 147, 231, 210, 96, 99,
       128, 241, 255, 168, 61, 243, 222,
       144, 41, 194, 92, 112, 118, 140,
       98, 90, 38, 156, 32, 216, 117,
       171, 14, 206, 117
-    ]],
+    ],
     tck_bytes: [
       5, 44, 47, 43, 14, 249, 162, 165,
       139, 157, 225, 217, 38, 77, 151, 140,
