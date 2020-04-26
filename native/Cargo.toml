@@ -1,6 +1,6 @@
 [package]
 name = "tcn-node"
-version = "0.2.0"
+version = "0.3.0-alpha.4"
 authors = ["David Rolle <miridius@miridi.us>"]
 license = "Apache-2.0"
 build = "build.rs"
@@ -15,6 +15,8 @@ crate-type = ["cdylib"]
 neon-build = "0.4.0"
 
 [dependencies]
-neon = "0.4.0"
-tcn = "0.4.1"
+neon = "^0.4"
+neon-serde = { git = "https://github.com/miridius/neon-serde", branch = "use-neon-0.4" }
 rand = "0.7"
+serde = { version = "1.0", features = ["derive"] }
+tcn = { git = "https://github.com/miridius/TCN", branch = "serde" }
