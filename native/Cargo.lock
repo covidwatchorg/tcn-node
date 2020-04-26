@@ -469,7 +469,7 @@ dependencies = [
 
 [[package]]
 name = "tcn-node"
-version = "0.3.0-alpha.4"
+version = "0.3.0-beta.0"
 dependencies = [
  "neon",
  "neon-build",
