@@ -32,7 +32,7 @@ In case you are using a different version of Node or an unusual system architect
 ## Usage
 
 ```js
-import tcn from "tcn-node";
+import * as tcn from "tcn-node";
 
 console.log(tcn.tcnExample()); // => "symptom data"
 
@@ -98,7 +98,12 @@ console.log(tcn.validateReport({
 
 ```
 $ git clone https://github.com/covid19risk/tcn-node.git && cd tcn-node
-$ npm run dev && node lib/index.js
+$ npm run dev
+$ node
+> const tcn = require('.')
+undefined
+> tcn.tcnExample()
+'symptom data'
 ```
 
 ### Testing
