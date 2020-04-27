@@ -1,19 +1,19 @@
-const tcn = require('..');
+const tcn = require("..");
 
-describe('tcnExample', () => {
+describe("tcnExample", () => {
   it("should return 'symptom data'", () => {
-    expect(tcn.tcnExample()).toBe('symptom data');
+    expect(tcn.tcnExample()).toBe("symptom data");
   });
 });
 
-describe('signedReportExample', () => {
+describe("signedReportExample", () => {
   let signedReport = tcn.signedReportExample();
-  it('should include a report with the expected values', () => {
+  it("should include a report with the expected values", () => {
     expect(signedReport.report.j_1).toBe(20);
     expect(signedReport.report.j_2).toBe(90);
-    expect(signedReport.report.memo_type).toBe('CoEpiV1');
+    expect(signedReport.report.memo_type).toBe("CoEpiV1");
   });
-  it('should have a valid signature', () => {
+  it("should have a valid signature", () => {
     expect(tcn.validateReport(signedReport)).toBe(true);
   });
 });
@@ -90,7 +90,7 @@ const exampleSignedReport = {
     ],
     j_1: 20,
     j_2: 90,
-    memo_type: 'CoEpiV1',
+    memo_type: "CoEpiV1",
     memo_data: [115, 121, 109, 112, 116, 111, 109, 32, 100, 97, 116, 97],
   },
   sig: {
@@ -165,8 +165,8 @@ const exampleSignedReport = {
   },
 };
 
-describe('validateReport', () => {
-  it('should return true for the example signed report in the README', () => {
+describe("validateReport", () => {
+  it("should return true for the example signed report in the README", () => {
     expect(tcn.validateReport(exampleSignedReport)).toBe(true);
   });
   it("should return false if the report's memo data is modified", () => {

@@ -1,4 +1,4 @@
-const native = require('../native');
+const native = require("../native");
 
 module.exports = {
   tcnExample: native.tcnExample,

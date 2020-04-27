@@ -12,8 +12,8 @@ Node.js module that wraps the [TCN Protocol Rust Implementation](https://github.
 - [ ] Expose full TCN API
 - [ ] Conversions from Strings etc. to/from byte arrays for convenience
 - [ ] Serialize TCN Errors
-- [ ] Use Typescript
-- [ ] Use Prettier & ESLint
+- [x] Use Typescript
+- [x] Use Prettier & ESLint
 - [ ] Automatically compile/run on changes (nodemon + cargo-watch)
 - [x] Put release process into a shell script
 
@@ -36,47 +36,156 @@ import * as tcn from "tcn-node";
 
 console.log(tcn.tcnExample()); // => "symptom data"
 
-console.log(tcn.signedReportExample()) // => generates a signed report as JSON
+console.log(tcn.signedReportExample()); // => generates a signed report as JSON
 
-console.log(tcn.validateReport({
-  report: {
-    rvk: [
-      205, 234, 147, 231, 210, 96, 99,
-      128, 241, 255, 168, 61, 243, 222,
-      144, 41, 194, 92, 112, 118, 140,
-      98, 90, 38, 156, 32, 216, 117,
-      171, 14, 206, 117
-    ],
-    tck_bytes: [
-      5, 44, 47, 43, 14, 249, 162, 165,
-      139, 157, 225, 217, 38, 77, 151, 140,
-      247, 198, 138, 23, 208, 188, 229, 189,
-      20, 101, 126, 83, 216, 18, 194, 19
-    ],
-    j_1: 20,
-    j_2: 90,
-    memo_type: 'CoEpiV1',
-    memo_data: [
-      115, 121, 109, 112,
-      116, 111, 109, 32,
-      100, 97, 116, 97
-    ]
-  },
-  sig: {
-    R_bytes: [
-      171, 0, 174, 55, 138, 201, 100, 209,
-      69, 98, 176, 85, 27, 240, 129, 22,
-      204, 209, 89, 245, 9, 31, 170, 4,
-      1, 69, 243, 251, 36, 31, 249, 192
-    ],
-    s_bytes: [
-      250, 99, 139, 105, 167, 126, 136, 208,
-      253, 158, 225, 46, 81, 179, 50, 90,
-      113, 63, 235, 163, 172, 193, 251, 86,
-      76, 118, 188, 170, 16, 252, 132, 8
-    ]
-  }
-})) // => true
+console.log(
+  tcn.validateReport({
+    report: {
+      rvk: [
+        205,
+        234,
+        147,
+        231,
+        210,
+        96,
+        99,
+        128,
+        241,
+        255,
+        168,
+        61,
+        243,
+        222,
+        144,
+        41,
+        194,
+        92,
+        112,
+        118,
+        140,
+        98,
+        90,
+        38,
+        156,
+        32,
+        216,
+        117,
+        171,
+        14,
+        206,
+        117,
+      ],
+      tck_bytes: [
+        5,
+        44,
+        47,
+        43,
+        14,
+        249,
+        162,
+        165,
+        139,
+        157,
+        225,
+        217,
+        38,
+        77,
+        151,
+        140,
+        247,
+        198,
+        138,
+        23,
+        208,
+        188,
+        229,
+        189,
+        20,
+        101,
+        126,
+        83,
+        216,
+        18,
+        194,
+        19,
+      ],
+      j_1: 20,
+      j_2: 90,
+      memo_type: "CoEpiV1",
+      memo_data: [115, 121, 109, 112, 116, 111, 109, 32, 100, 97, 116, 97],
+    },
+    sig: {
+      R_bytes: [
+        171,
+        0,
+        174,
+        55,
+        138,
+        201,
+        100,
+        209,
+        69,
+        98,
+        176,
+        85,
+        27,
+        240,
+        129,
+        22,
+        204,
+        209,
+        89,
+        245,
+        9,
+        31,
+        170,
+        4,
+        1,
+        69,
+        243,
+        251,
+        36,
+        31,
+        249,
+        192,
+      ],
+      s_bytes: [
+        250,
+        99,
+        139,
+        105,
+        167,
+        126,
+        136,
+        208,
+        253,
+        158,
+        225,
+        46,
+        81,
+        179,
+        50,
+        90,
+        113,
+        63,
+        235,
+        163,
+        172,
+        193,
+        251,
+        86,
+        76,
+        118,
+        188,
+        170,
+        16,
+        252,
+        132,
+        8,
+      ],
+    },
+  })
+); // => true
 ```
 
 ## Development
@@ -85,14 +194,14 @@ console.log(tcn.validateReport({
 
 1. Install [Rust](https://www.rust-lang.org/tools/install)
 2. Install Node Build Tools
-    - Mac:
-        1. Install Xcode
-        2. Install the Command Line Tools via Xcode under the menu
-        *Xcode → Preferences → Downloads.*
-    - Windows:  
-    `npm install --global --production windows-build-tools`
-    - Linux/WSL:  
-    `sudo apt install -y make gcc g++`
+   - Mac:
+     1. Install Xcode
+     2. Install the Command Line Tools via Xcode under the menu
+        _Xcode → Preferences → Downloads._
+   - Windows:  
+     `npm install --global --production windows-build-tools`
+   - Linux/WSL:  
+     `sudo apt install -y make gcc g++`
 
 ### Building and running from source
 
@@ -117,7 +226,7 @@ $ npm run dev && npm test
 Suggestion: only make full releases from master, otherwise make a pre-release
 
 Full release: `./scripts/release.sh major | minor | patch`  
-Pre-release: `./scripts/release.sh premajor | preminor | prepatch | prerelease --preid=alpha|beta|rc`  
+Pre-release: `./scripts/release.sh premajor | preminor | prepatch | prerelease --preid=alpha|beta|rc`
 
 Use minor/preminor for functional changes, patch/prepatch for bug fixes.  
 Use prerelease when already on a alpha/beta/rc version to just bump the last part.
