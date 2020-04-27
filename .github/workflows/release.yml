@@ -1,6 +1,6 @@
 # This workflow will do a clean install of dependencies, build from source, run tests, and upload binaries for different platforms & different versions of node
 
-name: Release Node Module
+name: Build
 
 # Run whenever we create a new version tag
 on:
@@ -24,11 +24,12 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - run: npm ci
-      - run: npm run build --if-present
+      - run: npm run build
+      - run: npm run lint
       - run: npm test
         env:
           CI: true
-      - run: npm run release
+      - run: npm run native:upload-binary
         env:
           NODE_PRE_GYP_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

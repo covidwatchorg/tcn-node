@@ -1,20 +1,20 @@
-const tcn = require("..");
+const { tcnExample, signedReportExample, validateReport } = require("..");
 
 describe("tcnExample", () => {
   it("should return 'symptom data'", () => {
-    expect(tcn.tcnExample()).toBe("symptom data");
+    expect(tcnExample()).toBe("symptom data");
   });
 });
 
 describe("signedReportExample", () => {
-  let signedReport = tcn.signedReportExample();
+  let signedReport = signedReportExample();
   it("should include a report with the expected values", () => {
     expect(signedReport.report.j_1).toBe(20);
     expect(signedReport.report.j_2).toBe(90);
     expect(signedReport.report.memo_type).toBe("CoEpiV1");
   });
   it("should have a valid signature", () => {
-    expect(tcn.validateReport(signedReport)).toBe(true);
+    expect(validateReport(signedReport)).toBe(true);
   });
 });
 
@@ -167,10 +167,10 @@ const exampleSignedReport = {
 
 describe("validateReport", () => {
   it("should return true for the example signed report in the README", () => {
-    expect(tcn.validateReport(exampleSignedReport)).toBe(true);
+    expect(validateReport(exampleSignedReport)).toBe(true);
   });
   it("should return false if the report's memo data is modified", () => {
     exampleSignedReport.report.memo_data.push(0);
-    expect(tcn.validateReport(exampleSignedReport)).toBe(false);
+    expect(validateReport(exampleSignedReport)).toBe(false);
   });
 });

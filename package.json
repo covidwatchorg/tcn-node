@@ -16,12 +16,13 @@
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
+    "lint": "tsdx lint src test",
     "test": "tsdx test",
-    "lint": "tsdx lint",
     "prepare": "tsdx build",
-    "dev": "neon build",
-    "install": "npx node-pre-gyp install --fallback-to-build=false || npx neon build --release",
-    "release": "node-pre-gyp package && node-pre-gyp-github publish --release"
+    "install": "npx node-pre-gyp install --fallback-to-build=false || npm run native:release",
+    "native:dev": "neon build",
+    "native:release": "neon build --release",
+    "native:upload-binary": "node-pre-gyp package && node-pre-gyp-github publish --release"
   },
   "repository": {
     "type": "git",

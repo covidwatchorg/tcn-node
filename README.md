@@ -32,14 +32,16 @@ In case you are using a different version of Node or an unusual system architect
 ## Usage
 
 ```js
-import * as tcn from "tcn-node";
+import { tcnExample, signedReportExample, validateReport } from "tcn-node";
 
-console.log(tcn.tcnExample()); // => "symptom data"
+console.log(tcnExample()); // => "symptom data"
 
-console.log(tcn.signedReportExample()); // => generates a signed report as JSON
+console.log(signedReportExample()); // => generates a signed report as JSON
+
+console.log(validateReport(signedReportExample())); // => true
 
 console.log(
-  tcn.validateReport({
+  validateReport({
     report: {
       rvk: [
         205,
@@ -190,6 +192,12 @@ console.log(
 
 ## Development
 
+This project uses:
+
+- [Neon](https://neon-bindings.com/) for compiling Rust code to a native Node.js addon
+- [TSDX](https://github.com/jaredpalmer/tsdx) for typescript tooling
+- GitHub Actions for CI/CD
+
 ### Prerequisites
 
 1. Install [Rust](https://www.rust-lang.org/tools/install)
@@ -207,7 +215,8 @@ console.log(
 
 ```
 $ git clone https://github.com/covid19risk/tcn-node.git && cd tcn-node
-$ npm run dev
+$ npm install
+$ npm run native:dev && npm build
 $ node
 > const tcn = require('.')
 undefined
@@ -215,10 +224,12 @@ undefined
 'symptom data'
 ```
 
+You can also use `npm start` to run the typescript build in development/watch mode. This is handy for catching errors while you work.
+
 ### Testing
 
 ```
-$ npm run dev && npm test
+$ npm run native:dev && npm test
 ```
 
 ### Releasing
