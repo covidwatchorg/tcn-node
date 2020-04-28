@@ -1,14 +1,28 @@
 {
   "name": "tcn-node",
   "version": "0.3.0",
-  "description": "Node.js Module that Wraps TCN Protocol Rust Implementation",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "description": "Node.js Module that wraps the TCN Protocol Rust implementation",
+  "main": "dist/index.js",
+  "module": "dist/tcn-node.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "native/index.node",
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
   "scripts": {
-    "dev": "neon build",
-    "test": "jest",
-    "install": "npx node-pre-gyp install --fallback-to-build=false || npx neon build --release",
-    "release": "node-pre-gyp package && node-pre-gyp-github publish --release"
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "lint": "tsdx lint src test",
+    "test": "tsdx test",
+    "prepare": "tsdx build",
+    "install": "npx node-pre-gyp install --fallback-to-build=false || npm run native:release",
+    "native:dev": "neon build",
+    "native:release": "neon build --release",
+    "native:upload-binary": "node-pre-gyp package && node-pre-gyp-github publish --release"
   },
   "repository": {
     "type": "git",
@@ -28,15 +42,22 @@
   "homepage": "https://github.com/covid19risk/tcn-node#readme",
   "dependencies": {},
   "devDependencies": {
-    "jest": "^25.4.0",
     "neon-cli": "^0.4.0",
     "node-pre-gyp": "^0.14.0",
-    "node-pre-gyp-github": "^1.4.3"
+    "node-pre-gyp-github": "^1.4.3",
+    "husky": "^4.2.5",
+    "tsdx": "^0.13.2",
+    "tslib": "^1.11.1",
+    "typescript": "^3.8.3"
   },
-  "files": [
-    "native/index.node",
-    "lib"
-  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "trailingComma": "es5"
+  },
   "binary": {
     "module_name": "index",
     "host": "https://github.com/covid19risk/tcn-node/releases/download/",
@@ -44,8 +65,5 @@
     "package_name": "{node_abi}-{platform}-{arch}.tar.gz",
     "module_path": "./native",
     "pkg_path": "."
-  },
-  "engines": {
-    "node": ">=10"
   }
 }

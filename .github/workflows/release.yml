@@ -1,12 +1,23 @@
-# This workflow will do a clean install of dependencies, build from source, run tests, and upload binaries for different platforms & different versions of node
+# This workflow will:
+# - On both PRs and tags:
+#   - Do a clean install of dependencies
+#   - Build from source
+#   - Run linter
+#   - Run tests on all officially supported platforms
+# - Only on tags:
+#   - Create a release
+#   - Upload binaries for Node v10, v12, v13, and v14 for Windows, Mac OS, and Linux
+#   - Publish to NPM
 
-name: Release Node Module
+name: Build
 
-# Run whenever we create a new version tag
 on:
   push:
     tags:
       - v*
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build:
@@ -18,30 +29,32 @@ jobs:
         node: [10.x, 12.x, 13.x, 14.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node }}
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
-      env:
-        CI: true
-    - run: npm run release
-      env:
-        NODE_PRE_GYP_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm ci --build-from-source
+      - run: npm run lint
+      - run: npm test
+        env:
+          CI: true
+      - if: startsWith(github.ref, 'refs/tags/v')
+        run: npm run native:upload-binary
+        env:
+          NODE_PRE_GYP_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   publish:
+    if: startsWith(github.ref, 'refs/tags/v')
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
-      with:
-        node-version: 12
-        registry-url: https://registry.npmjs.org/
-    - run: npm ci
-    - run: npm publish
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
