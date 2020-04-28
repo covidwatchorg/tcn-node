@@ -3,6 +3,7 @@
 Node.js module that wraps the [TCN Protocol Rust Implementation](https://github.com/TCNCoalition/TCN)
 
 ![npm](https://img.shields.io/npm/v/tcn-node)
+![Build](https://github.com/covid19risk/tcn-node/workflows/Build/badge.svg)
 
 ## TODO
 
