@@ -215,8 +215,7 @@ This project uses:
 
 ```
 $ git clone https://github.com/covid19risk/tcn-node.git && cd tcn-node
-$ npm install
-$ npm run native:dev && npm build
+$ npm install --build-from-source
 $ node
 > const tcn = require('.')
 undefined
