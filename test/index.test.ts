@@ -1,4 +1,4 @@
-const { tcnExample, signedReportExample, validateReport } = require("..");
+import { tcnExample, signedReportExample, validateReport } from "../src/index";
 
 describe("tcnExample", () => {
   it("should return 'symptom data'", () => {
