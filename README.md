@@ -32,8 +32,51 @@ In case you are using a different version of Node or an unusual system architect
 
 ## Usage
 
+### Using the TCN native module directly
+
+The API of the Rust [tcn crate](https://docs.rs/tcn/0.4.1/tcn/) is wrapped in a native Node addon and can be used in much the same way as if you were using that crate in Rust code:
+
 ```js
-import { tcnExample, signedReportExample, validateReport } from "tcn-node";
+const { ReportAuthorizationKey, MemoType } = require("tcn-node").native;
+const assert = require("assert");
+
+// Generate a report authorization key.  This key represents the capability
+// to publish a report about a collection of derived temporary contact numbers.
+let rak = new ReportAuthorizationKey();
+
+// Use the temporary contact key ratchet mechanism to compute a list
+// of temporary contact numbers.
+let tck = rak.initial_temporary_contact_key(); // tck <- tck_1
+let tcns = [];
+for (let i = 0; i < 100; i++) {
+  tcns.push(tck.temporary_contact_number());
+  tck = tck.ratchet();
+}
+
+// Prepare a report about a subset of the temporary contact numbers.
+let signed_report = rak.create_report(
+  MemoType.CoEpiV1, // The memo type
+  Buffer.from("symptom data"), // The memo data
+  20, // Index of the first TCN to disclose
+  90 // Index of the last TCN to check
+);
+
+// Verify the source integrity of the report...
+let report = signed_report.verify();
+// ...allowing the disclosed TCNs to be recomputed.
+let recomputed_tcns = report.temporary_contact_numbers();
+
+// Check that the recomputed TCNs match the originals.
+// The slice is offset by 1 because tcn_0 is not included.
+assert.deepEqual(recomputed_tcns, tcns.slice(20 - 1, 90 - 1));
+```
+
+### JavaScript API
+
+The JS API is a work in progress and currently consists of a few example functions only:
+
+```js
+const { tcnExample, signedReportExample, validateReport } = require("tcn-node");
 
 console.log(tcnExample()); // => "symptom data"
 
