@@ -1,71 +1,210 @@
-#[macro_use]
-extern crate neon_serde;
-
 use neon::prelude::*;
-use std::str;
 use tcn::*;
 
-export! {
+fn to_buffer<'a, C: Context<'a>>(cx: &mut C, bytes: &[u8]) -> JsResult<'a, JsBuffer> {
+    let buf = cx.buffer(bytes.len() as u32)?;
+    buf.borrow(&cx.lock()).as_mut_slice().copy_from_slice(bytes);
+    Ok(buf)
+}
 
-    fn tcnExample() -> String {
-        // Generate a report authorization key.  This key represents the capability
-        // to publish a report about a collection of derived temporary contact numbers.
-        let rak = ReportAuthorizationKey::new(rand::thread_rng());
+declare_types! {
 
-        // Use the temporary contact key ratchet mechanism to compute a list
-        // of temporary contact numbers.
-        let mut tck = rak.initial_temporary_contact_key(); // tck <- tck_1
-        let mut tcns = Vec::new();
-        for _ in 0..100 {
-            tcns.push(tck.temporary_contact_number());
-            tck = tck.ratchet().unwrap();
+    pub class JsReportAuthorizationKey for ReportAuthorizationKey {
+        init(_cx) {
+            Ok(ReportAuthorizationKey::new(rand::thread_rng()))
         }
 
-        // Prepare a report about a subset of the temporary contact numbers.
-        let signed_report = rak
-            .create_report(
-                MemoType::CoEpiV1,        // The memo type
-                b"symptom data".to_vec(), // The memo data
-                20,                       // Index of the first TCN to disclose
-                90,                       // Index of the last TCN to check
-            )
-            .expect("Report creation can only fail if the memo data is too long");
+        method initial_temporary_contact_key(mut cx) {
+            let this = cx.this();
+            Ok(JsTemporaryContactKey::new(&mut cx, vec![this])?.upcast())
+        }
 
-        // Verify the source integrity of the report...
-        let report = signed_report
-            .verify()
-            .expect("Valid reports should verify correctly");
+        method create_report(mut cx) {
+            let this = cx.this().upcast();
+            let memo_type = cx.argument::<JsValue>(0)?;
+            let memo_data = cx.argument::<JsValue>(1)?;
+            let start_index = cx.argument::<JsValue>(2)?;
+            let end_index = cx.argument::<JsValue>(3)?;
+            Ok(JsSignedReport::new(
+                &mut cx,
+                vec![this, memo_type, memo_data, start_index, end_index],
+            )?
+            .upcast())
+        }
 
-        // ...allowing the disclosed TCNs to be recomputed.
-        let recomputed_tcns = report.temporary_contact_numbers().collect::<Vec<_>>();
+        method toObject(mut cx) {
+            let this = cx.this().borrow(&cx.lock()).clone();
+            Ok(neon_serde::to_value(&mut cx, &this)?)
+        }
 
-        // Check that the recomputed TCNs match the originals.
-        // The slice is offset by 1 because tcn_0 is not included.
-        assert_eq!(&recomputed_tcns[..], &tcns[20 - 1..90 - 1]);
+        method toString(mut cx) {
+            let debug_str = format!("{:?}", *cx.this().borrow(&cx.lock()));
+            Ok(cx.string(debug_str).upcast())
+        }
 
-        // Read the memo data from the report
-        let memo_data =
-            str::from_utf8(report.memo_data()).expect("Could not convert memo bytes to string");
-
-        String::from(memo_data)
+        method toJSON(mut cx) {
+            let this = cx.this().borrow(&cx.lock()).clone();
+            let json = serde_json::to_string(&this).unwrap();
+            let string = cx.string(json);
+            Ok(string.upcast())
+        }
     }
 
-    fn signedReportExample() -> SignedReport {
-        let rak = ReportAuthorizationKey::new(rand::thread_rng());
+    pub class JsTemporaryContactKey for TemporaryContactKey {
+        init(mut cx) {
+            let from_value = cx.argument::<JsValue>(0)?;
+            if from_value.is_a::<JsReportAuthorizationKey>() {
+                let rak = cx.argument::<JsReportAuthorizationKey>(0)?;
+                let guard = cx.lock();
+                let rak = rak.borrow(&guard);
+                Ok(rak.initial_temporary_contact_key())
+            } else if from_value.is_a::<JsTemporaryContactKey>() {
+                let tck = cx.argument::<JsTemporaryContactKey>(0)?;
+                let guard = cx.lock();
+                let tck = tck.borrow(&guard);
+                Ok(tck.ratchet().expect("No more TCNs available"))
+            } else {
+                Ok(neon_serde::from_value(&mut cx, from_value)?)
+            }
+        }
 
-        let signed_report = rak
-            .create_report(
-                MemoType::CoEpiV1,        // The memo type
-                b"symptom data".to_vec(), // The memo data
-                20,                       // Index of the first TCN to disclose
-                90,                       // Index of the last TCN to check
-            )
-            .expect("Report creation can only fail if the memo data is too long");
+        method temporary_contact_number(mut cx) {
+            let tcn = cx.this().borrow(&cx.lock()).temporary_contact_number();
+            Ok(to_buffer(&mut cx, &tcn.0)?.upcast())
+        }
 
-        signed_report
+        method ratchet(mut cx) {
+            let this = cx.this();
+            Ok(JsTemporaryContactKey::new(&mut cx, vec![this])?.upcast())
+        }
+
+        method toObject(mut cx) {
+            let this = cx.this().borrow(&cx.lock()).clone();
+            Ok(neon_serde::to_value(&mut cx, &this)?)
+        }
+
+        method toString(mut cx) {
+            let debug_str = format!("{:?}", *cx.this().borrow(&cx.lock()));
+            Ok(cx.string(debug_str).upcast())
+        }
+
+        method toJSON(mut cx) {
+            let this = cx.this().borrow(&cx.lock()).clone();
+            let json = serde_json::to_string(&this).unwrap();
+            let string = cx.string(json);
+            Ok(string.upcast())
+        }
     }
 
-    fn validateReport(signed_report: SignedReport) -> bool {
-        signed_report.verify().is_ok()
+    pub class JsSignedReport for SignedReport {
+        init(mut cx) {
+            let from_value = cx.argument::<JsValue>(0)?;
+            if from_value.is_a::<JsReportAuthorizationKey>() {
+                let rak = cx.argument::<JsReportAuthorizationKey>(0)?;
+                let memo_type = match cx.argument::<JsNumber>(1)?.value() as u8 {
+                    0 => MemoType::CoEpiV1,
+                    1 => MemoType::CovidWatchV1,
+                    0xff => MemoType::Reserved,
+                    _ => panic!("Unknown memo type"),
+                };
+                let memo_data = cx.argument::<JsBuffer>(2)?;
+                let start_index = cx.argument::<JsNumber>(3)?.value() as u16;
+                let end_index = cx.argument::<JsNumber>(4)?.value() as u16;
+                let guard = cx.lock();
+                let rak = rak.borrow(&guard);
+                let memo_data = memo_data.borrow(&guard);
+                Ok(rak
+                    .create_report(
+                        memo_type,
+                        memo_data.as_slice().to_vec(),
+                        start_index,
+                        end_index,
+                    )
+                    .expect("Memo data too long"))
+            } else {
+                Ok(neon_serde::from_value(&mut cx, from_value)?)
+            }
+        }
+
+        method verify(mut cx) {
+            let this = cx.this();
+            Ok(JsReport::new(&mut cx, vec![this])?.upcast())
+        }
+
+        method toObject(mut cx) {
+            let this = cx.this().borrow(&cx.lock()).clone();
+            Ok(neon_serde::to_value(&mut cx, &this)?)
+        }
+
+        method toJSON(mut cx) {
+            let this = cx.this().borrow(&cx.lock()).clone();
+            let json = serde_json::to_string(&this).unwrap();
+            let string = cx.string(json);
+            Ok(string.upcast())
+        }
+
+        method toString(mut cx) {
+            let debug_str = format!("{:?}", *cx.this().borrow(&cx.lock()));
+            Ok(cx.string(debug_str).upcast())
+        }
+    }
+
+    pub class JsReport for Report {
+        init(mut cx) {
+            let signed_report = cx.argument::<JsSignedReport>(0)?;
+            let signed_report = signed_report.borrow(&cx.lock()).clone();
+            Ok(signed_report.verify().expect("Invalid Signature"))
+        }
+
+        method temporary_contact_numbers(mut cx) {
+            // collect all TCNs first because so that we know how many there are ...
+            let tcns: Vec<_> = cx
+                .this()
+                .borrow(&cx.lock())
+                .temporary_contact_numbers()
+                .collect();
+            // ... because JsArray must be initialized with a fixed length
+            let array = JsArray::new(&mut cx, tcns.len() as u32);
+            for (i, tcn) in tcns.iter().enumerate() {
+                let buffer = to_buffer(&mut cx, &tcn.0)?;
+                array.set(&mut cx, i as u32, buffer).unwrap();
+            }
+            Ok(array.upcast())
+        }
+
+        method toObject(mut cx) {
+            let this = cx.this().borrow(&cx.lock()).clone();
+            Ok(neon_serde::to_value(&mut cx, &this)?)
+        }
+
+        method toString(mut cx) {
+            let debug_str = format!("{:?}", *cx.this().borrow(&cx.lock()));
+            Ok(cx.string(debug_str).upcast())
+        }
+
+        method toJSON(mut cx) {
+            let this = cx.this().borrow(&cx.lock()).clone();
+            let json = serde_json::to_string(&this).unwrap();
+            let string = cx.string(json);
+            Ok(string.upcast())
+        }
     }
 }
+
+register_module!(mut m, {
+    m.export_class::<JsReportAuthorizationKey>("ReportAuthorizationKey")?;
+    m.export_class::<JsTemporaryContactKey>("TemporaryContactKey")?;
+    m.export_class::<JsSignedReport>("SignedReport")?;
+    m.export_class::<JsReport>("Report")?;
+
+    let co_epi_v1 = m.number(0);
+    let covid_watch_v1 = m.number(1);
+    let reserved = m.number(0xff);
+    let memo_type = JsObject::new(&mut m);
+    memo_type.set(&mut m, "CoEpiV1", co_epi_v1)?;
+    memo_type.set(&mut m, "CovidWatchV1", covid_watch_v1)?;
+    memo_type.set(&mut m, "Reserved", reserved)?;
+    m.export_value("MemoType", memo_type)?;
+
+    Ok(())
+});
