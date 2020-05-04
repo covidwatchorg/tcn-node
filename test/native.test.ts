@@ -1,4 +1,4 @@
-const { ReportAuthorizationKey, MemoType } = require("../src/index").native;
+const { ReportAuthorizationKey, MemoType } = require("../native");
 
 describe("TCN native module", () => {
   // Below is taken directly from the Rust example at https://docs.rs/tcn/0.4.1/tcn/

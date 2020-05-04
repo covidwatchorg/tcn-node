@@ -37,12 +37,12 @@ In case you are using a different version of Node or an unusual system architect
 The API of the Rust [tcn crate](https://docs.rs/tcn/0.4.1/tcn/) is wrapped in a native Node addon and can be used in much the same way as if you were using that crate in Rust code:
 
 ```js
-const { ReportAuthorizationKey, MemoType } = require("../src/index").native;
+const { ReportAuthorizationKey, MemoType } = require("tcn-node").native;
 const assert = require("assert");
 
 // Generate a report authorization key.  This key represents the capability
 // to publish a report about a collection of derived temporary contact numbers.
-let rak = new native.ReportAuthorizationKey();
+let rak = new ReportAuthorizationKey();
 
 // Use the temporary contact key ratchet mechanism to compute a list
 // of temporary contact numbers.
@@ -55,7 +55,7 @@ for (let i = 0; i < 100; i++) {
 
 // Prepare a report about a subset of the temporary contact numbers.
 let signed_report = rak.create_report(
-  native.MemoType.CoEpiV1, // The memo type
+  MemoType.CoEpiV1, // The memo type
   Buffer.from("symptom data"), // The memo data
   20, // Index of the first TCN to disclose
   90 // Index of the last TCN to check
@@ -76,7 +76,7 @@ assert.deepEqual(recomputed_tcns, tcns.slice(20 - 1, 90 - 1));
 The JS API is a work in progress and currently consists of a few example functions only:
 
 ```js
-import { tcnExample, signedReportExample, validateReport } from "tcn-node";
+const { tcnExample, signedReportExample, validateReport } = require("tcn-node");
 
 console.log(tcnExample()); // => "symptom data"
 
