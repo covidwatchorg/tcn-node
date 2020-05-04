@@ -1,6 +1,6 @@
 {
   "name": "tcn-node",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Node.js Module that wraps the TCN Protocol Rust implementation",
   "main": "dist/index.js",
   "module": "dist/tcn-node.esm.js",
